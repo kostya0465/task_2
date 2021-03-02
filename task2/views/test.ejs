@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%=title %></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+
+<h1><%=title %></h1>
+<p> Name:
+    <input type="text" name="input" id="name">
+</p>
+<p> Date:
+    <input type="text" name="input1" id="date">
+</p>
+<button onclick="myFunction1()">show</button><br>
+<button onclick="myFunction()">add</button><br>
+<p>Новая строка: <span id="span"></span></p>
+<p>Энтропия: <span id="span1"></span></p><br>
+<p>Старые строки: <span id="span1"></span></p>
+<script>
+    function myFunction() {
+        fetch('/name_date', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: document.getElementById("name")["value"],
+                date: document.getElementById("date")["value"]
+            })
+        })
+    }
+    function myFunction1() {
+        var name = document.getElementById("name")["value"]
+        var date = document.getElementById("date")["value"]
+        let s = ""
+        for (let i = 0; i < name.length; i++){
+            for (let j = 0; j < date[i]; j++){
+                s += name[i];
+            }
+        }
+        var a = new Array(26);
+        a.fill(0);
+        for(let i = 0; i < s.length; i++){
+            var index = s.charCodeAt(i) - 97;
+            a[index]++;
+        }
+        var entropy = 0;
+        for(let i = 0; i < a.length; i++){
+            if(a[i] !== 0) {
+                entropy += a[i] / s.length * Math.log(a[i] / s.length);
+            }
+        }
+        document.getElementById("span")["textContent"] = s;
+        document.getElementById("span1")["textContent"] = entropy;
+    }
+</script>
+<% for(var i=0; i<str.length;i++) {%>
+    <p><%=str[i] %></p>
+<%} %>
+</body>
+<html>
